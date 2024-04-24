@@ -1,0 +1,25 @@
+#Issue
+
+import pandas as pd
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from collections import Counter
+
+negative_reviews = df.loc[df['reviewRating.ratingValue'] < 2,
+'reviewBody']
+
+stop_words = set(stopwords.words('english'))
+negative_reviews_text = ' '.join(negative_reviews)
+tokens = word_tokenize(negative_reviews_text.lower())
+filtered_tokens = [token for token in tokens if token.isalnum() and token
+not in stop_words]
+issue_keywords = ['problem', 'issue', 'error', 'bug', 'defect',
+'complaint', 'disappoint', 'fault']
+issues = [word for word in filtered_tokens if word in issue_keywords]
+issue_counts = Counter(issues)
+sorted_issues = sorted(issue_counts.items(), key=lambda x: x[1],
+reverse=True)
+
+print("Most common keywords in negative reviews with rating less than 2:")
+for issue, count in sorted_issues:
+  print(f"Keyword: {issue}, Count: {count}")
